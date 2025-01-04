@@ -10,6 +10,18 @@ public class IslandModel {
     private int gridSize;
     private String blueprint;
 
+    public IslandModel(UUID ownerUuid, int centerX, int centerZ, int gridSize, String blueprint) {
+        this.id = Integer.parseInt(UUID.randomUUID().toString());
+        this.ownerUuid = ownerUuid;
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.gridSize = gridSize;
+        this.blueprint = blueprint;
+    }
+
+    public IslandModel() {
+    }
+
     public String getBlueprint() {
         return blueprint;
     }

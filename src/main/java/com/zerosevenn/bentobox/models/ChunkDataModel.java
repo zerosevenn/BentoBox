@@ -1,4 +1,5 @@
 package com.zerosevenn.bentobox.models;
+import java.util.UUID;
 
 public class ChunkDataModel {
     private int id;
@@ -6,6 +7,17 @@ public class ChunkDataModel {
     private int chunkX;
     private int chunkZ;
     private boolean isUnlocked;
+
+    public ChunkDataModel(int islandId, int chunkX, int chunkZ, boolean isUnlocked) {
+        this.id = Integer.parseInt(UUID.randomUUID().toString());
+        this.islandId = islandId;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.isUnlocked = isUnlocked;
+    }
+
+    public ChunkDataModel() {
+    }
 
     public int getId() {
         return id;

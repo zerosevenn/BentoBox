@@ -1,10 +1,12 @@
 package com.zerosevenn.bentobox.database.repositories;
 
 import com.zerosevenn.bentobox.database.provider.MySQLContainer;
+import com.zerosevenn.bentobox.models.GridDataModel;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GridRepository extends MySQLContainer {
@@ -21,6 +23,61 @@ public class GridRepository extends MySQLContainer {
                 ");";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createGrid(GridDataModel grid) {
+        String sql = "INSERT INTO grid_data (id, gridX, gridZ, isOccupied) VALUES (?, ?, ?, ?)";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, grid.getId());
+            statement.setInt(2, grid.getGridX());
+            statement.setInt(3, grid.getGridZ());
+            statement.setBoolean(4, grid.isOccupied());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public GridDataModel readGrid(String id) {
+        String sql = "SELECT * FROM grid_data WHERE id = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new GridDataModel(
+                            resultSet.getInt("gridX"),
+                            resultSet.getInt("gridZ"),
+                            resultSet.getBoolean("isOccupied")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public void updateGrid(GridDataModel grid) {
+        String sql = "UPDATE grid_data SET gridX = ?, gridZ = ?, isOccupied = ? WHERE id = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, grid.getGridX());
+            statement.setInt(2, grid.getGridZ());
+            statement.setBoolean(3, grid.isOccupied());
+            statement.setInt(4, grid.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteGrid(String id) {
+        String sql = "DELETE FROM grid_data WHERE id = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, id);
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

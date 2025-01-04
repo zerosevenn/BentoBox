@@ -1,6 +1,8 @@
 package com.zerosevenn.bentobox;
 
+import com.zerosevenn.bentobox.commands.ChunkCommand;
 import com.zerosevenn.bentobox.database.provider.MySQLProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BentoBox extends JavaPlugin {
@@ -8,6 +10,9 @@ public final class BentoBox extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        up();
+        registerCommand();
+        registerListeners();
     }
 
     @Override
@@ -20,7 +25,7 @@ public final class BentoBox extends JavaPlugin {
     }
 
     public void registerCommand(){
-
+        getCommand("chunk").setExecutor(new ChunkCommand(this));
     }
 
     public void registerListeners(){
