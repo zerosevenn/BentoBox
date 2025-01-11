@@ -2,3 +2,6 @@ name: bentobox
 version: '0.1'
 main: com.zerosevenn.bentobox.BentoBox
 api-version: '1.21'
+commands:
+  chunk:
+    description: main command to generate chunks
