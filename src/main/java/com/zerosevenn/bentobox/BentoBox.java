@@ -1,8 +1,10 @@
 package com.zerosevenn.bentobox;
-
 import com.zerosevenn.bentobox.commands.ChunkCommand;
-import com.zerosevenn.bentobox.database.provider.MySQLProvider;
-import org.bukkit.Bukkit;
+import com.zerosevenn.bentobox.database.provider.MySQLContainer;
+import com.zerosevenn.bentobox.database.repositories.ChunkDataRepository;
+import com.zerosevenn.bentobox.database.repositories.GridRepository;
+import com.zerosevenn.bentobox.database.repositories.IslandRepository;
+import com.zerosevenn.bentobox.database.repositories.PlayerDataRepository;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BentoBox extends JavaPlugin {
@@ -21,7 +23,10 @@ public final class BentoBox extends JavaPlugin {
     }
 
     public void up(){
-
+        new ChunkDataRepository(this).createChunkDataTable();
+        new GridRepository(this).createGridDataTable();
+        new IslandRepository(this).createIslandTable();
+        new PlayerDataRepository(this).createTable();
     }
 
     public void registerCommand(){

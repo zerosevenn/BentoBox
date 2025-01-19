@@ -83,6 +83,22 @@ public class GridRepository extends MySQLContainer {
         }
     }
 
+    public boolean isCellAvailable(int gridX, int gridZ) {
+        String sql = "SELECT isOccupied FROM grid_data WHERE gridX = ? AND gridZ = ?";
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, gridX);
+            statement.setInt(2, gridZ);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return !resultSet.getBoolean("isOccupied");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
 
     public Connection getConnection() {
         return getConnection("grid_data.sql");

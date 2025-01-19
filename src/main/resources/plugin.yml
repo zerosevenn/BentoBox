@@ -4,4 +4,5 @@ main: com.zerosevenn.bentobox.BentoBox
 api-version: '1.21'
 commands:
   chunk:
-    description: main command to generate chunks
+    description: Command to generate the initial chunk.
+    aliases: [is, island, c]

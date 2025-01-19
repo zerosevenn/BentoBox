@@ -2,7 +2,6 @@ package com.zerosevenn.bentobox.database.provider;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

@@ -1,5 +1,6 @@
 package com.zerosevenn.bentobox.commands;
 
+import com.zerosevenn.bentobox.managers.ChunkUnlockManager;
 import com.zerosevenn.bentobox.managers.WorldManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,8 +33,8 @@ public class ChunkCommand implements CommandExecutor {
         }
 
         if (strings.length == 0) {
-            worldManager = new WorldManager(plugin);
-            worldManager.generatePlayerChunkWithAnimation(player);
+            worldManager = new WorldManager(plugin, new ChunkUnlockManager());
+            worldManager.generateChunk(player,player.getLocation());
 
         }
 

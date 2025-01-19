@@ -3,12 +3,12 @@ import java.util.UUID;
 
 public class ChunkDataModel {
     private int id;
-    private int islandId;
+    private String islandId;
     private int chunkX;
     private int chunkZ;
     private boolean isUnlocked;
 
-    public ChunkDataModel(int islandId, int chunkX, int chunkZ, boolean isUnlocked) {
+    public ChunkDataModel(String islandId, int chunkX, int chunkZ, boolean isUnlocked) {
         this.id = Integer.parseInt(UUID.randomUUID().toString());
         this.islandId = islandId;
         this.chunkX = chunkX;
@@ -27,11 +27,11 @@ public class ChunkDataModel {
         this.id = id;
     }
 
-    public int getIslandId() {
+    public String getIslandId() {
         return islandId;
     }
 
-    public void setIslandId(int islandId) {
+    public void setIslandId(String islandId) {
         this.islandId = islandId;
     }
 

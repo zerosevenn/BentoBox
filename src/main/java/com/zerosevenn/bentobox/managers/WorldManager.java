@@ -2,12 +2,13 @@ package com.zerosevenn.bentobox.managers;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -16,19 +17,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class WorldManager {
     private final JavaPlugin plugin;
-    private final World randomWorld;
+    private World randomWorld;
+    private final ChunkUnlockManager chunkUnlockManager;
 
-    public WorldManager(JavaPlugin plugin) {
+    public WorldManager(JavaPlugin plugin, ChunkUnlockManager chunkUnlockManager) {
         this.plugin = plugin;
+        this.chunkUnlockManager = chunkUnlockManager;
         this.randomWorld = Bukkit.getWorld("world");
         if (this.randomWorld == null) {
             throw new IllegalStateException("World 'world' does not exist!");
         }
     }
 
-    public void generatePlayerChunkWithAnimation(Player player) {
+    public void generateChunk(Player player, Location location, int delay, int minY, int maxY) {
         try {
-            Chunk bukkitChunk = player.getLocation().getChunk();
+            Chunk bukkitChunk = location.getChunk();
             bukkitChunk.load(true);
 
             if (!bukkitChunk.isLoaded()) {
@@ -36,14 +39,10 @@ public class WorldManager {
                 return;
             }
 
+            Location chunkCenter = bukkitChunk.getBlock(8, 0, 8).getLocation();
             World targetWorld = bukkitChunk.getWorld();
             int cx = bukkitChunk.getX();
             int cz = bukkitChunk.getZ();
-            int minY = targetWorld.getMinHeight();
-            int maxY = targetWorld.getMaxHeight();
-            int delay = 5;
-
-            plugin.getLogger().info("Starting animated chunk generation for player " + player.getName());
 
             for (int y = minY; y < maxY; y++) {
                 final int currentY = y;
@@ -63,7 +62,6 @@ public class WorldManager {
                                 session.setBlock(BlockVector3.at(worldX, currentY, worldZ), blockType.getDefaultState());
                             }
                         }
-                        plugin.getLogger().info("Generated layer " + currentY + " for chunk [" + cx + ", " + cz + "]");
                     } catch (Exception e) {
                         plugin.getLogger().severe("Error generating layer " + currentY + ": " + e.getMessage());
                     }
@@ -76,6 +74,34 @@ public class WorldManager {
         } catch (Exception e) {
             plugin.getLogger().severe("Error during animated generation: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void generateChunk(Player player, Location location) {
+        int delay = 1;
+        int minY = location.getWorld().getMinHeight();
+        int maxY = location.getWorld().getMaxHeight();
+        generateChunk(player, location, delay, minY, maxY);
+    }
+
+    public void generateChunk(Player player, Location location, int delay) {
+        int minY = location.getWorld().getMinHeight();
+        int maxY = location.getWorld().getMaxHeight();
+        generateChunk(player, location, delay, minY, maxY);
+    }
+
+    public void generateChunk(Player player, Location location, int minY, int maxY) {
+        int delay = 1;
+        generateChunk(player, location, delay, minY, maxY);
+    }
+
+    public void generateChunk(Player player, Location location, World customWorld, int delay, int minY, int maxY) {
+        World originalWorld = this.randomWorld;
+        try {
+            this.randomWorld = customWorld;
+            generateChunk(player, location, delay, minY, maxY);
+        } finally {
+            this.randomWorld = originalWorld;
         }
     }
 }

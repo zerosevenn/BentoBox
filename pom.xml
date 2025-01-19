@@ -56,24 +56,6 @@
                     <minimizeJar>false</minimizeJar>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>net.md-5</groupId>
-                <artifactId>SpecialSource</artifactId>
-                <version>1.11.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <remap>true</remap>
-                            <inJar>${project.build.directory}/${project.build.finalName}.jar</inJar>
-                            <outJar>${project.build.directory}/${project.build.finalName}-remapped.jar</outJar>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <resources>
             <resource>
@@ -104,11 +86,6 @@
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.2.9</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>SpecialSource</artifactId>
-            <version>1.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
