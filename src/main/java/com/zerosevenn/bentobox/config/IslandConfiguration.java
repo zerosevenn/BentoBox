@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class IslandConfiguration extends AbstractConfiguration {
 
     public IslandConfiguration(JavaPlugin instance) {
-        super(instance, "island/island");
+        super(instance, "islands/island");
     }
-    
+
 }

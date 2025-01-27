@@ -3,13 +3,20 @@ package com.zerosevenn.bentobox.models;
 import java.util.UUID;
 
 public class PlayerDataModel {
-    private int id;
+    private String id;
     private UUID playerUuid;
     private int islandsOwned;
     private int totalChunksUnlocked;
 
     public PlayerDataModel(UUID playerUuid, int islandsOwned, int totalChunksUnlocked) {
-        this.id = Integer.parseInt(UUID.randomUUID().toString());
+        this.id = UUID.randomUUID().toString();
+        this.playerUuid = playerUuid;
+        this.islandsOwned = islandsOwned;
+        this.totalChunksUnlocked = totalChunksUnlocked;
+    }
+
+    public PlayerDataModel(String id, UUID playerUuid, int islandsOwned, int totalChunksUnlocked) {
+        this.id = id;
         this.playerUuid = playerUuid;
         this.islandsOwned = islandsOwned;
         this.totalChunksUnlocked = totalChunksUnlocked;
@@ -18,11 +25,11 @@ public class PlayerDataModel {
     public PlayerDataModel() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

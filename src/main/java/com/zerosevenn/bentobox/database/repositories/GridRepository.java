@@ -101,6 +101,6 @@ public class GridRepository extends MySQLContainer {
 
 
     public Connection getConnection() {
-        return getConnection("grid_data.sql");
+        return getConnection("grid_data.sql", "grids");
     }
 }

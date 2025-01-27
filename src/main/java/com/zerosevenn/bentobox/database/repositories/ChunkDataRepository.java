@@ -17,22 +17,25 @@ public class ChunkDataRepository extends MySQLContainer {
     }
 
     public void createChunkDataTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS `chunk_data` (\n" +
-                "    `id` INT AUTO_INCREMENT PRIMARY KEY,\n" +
-                "    `islandId` VARCHAR(255) NOT NULL,\n" +
-                "    `chunkX` INT NOT NULL,\n" +
-                "    `chunkZ` INT NOT NULL,\n" +
-                "    `isUnlocked` BOOLEAN NOT NULL DEFAULT FALSE,\n" +
-                "    FOREIGN KEY (`islandId`) REFERENCES `island_data`(`id`)\n" +
-                ");";
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        String sql = "CREATE TABLE IF NOT EXISTS `chunk_data` (" +
+//                "`id` INT AUTO_INCREMENT PRIMARY KEY," +
+//                "`islandId` VARCHAR(255) NOT NULL," +
+//                "`chunkX` INT NOT NULL," +
+//                "`chunkZ` INT NOT NULL," +
+//                "`isUnlocked` BOOLEAN NOT NULL DEFAULT FALSE," +
+//                "FOREIGN KEY (`islandId`) REFERENCES `island_data`(`id`) " +
+//                "ON DELETE CASCADE ON UPDATE CASCADE" +
+//                ") ENGINE=InnoDB;";
+//        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
+//            statement.execute();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
+
     public void insertChunkData(Chunk chunk, String islandId, boolean isUnlocked) {
+        System.out.println("Tentando insert chunk data");
         String sql = "INSERT INTO `chunk_data` (`islandId`, `chunkX`, `chunkZ`, `isUnlocked`) VALUES (?, ?, ?, ?);";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, islandId);
@@ -79,7 +82,7 @@ public class ChunkDataRepository extends MySQLContainer {
     }
 
     public boolean isChunkUnlocked(World world, int chunkX, int chunkZ) {
-        String sql = "SELECT `isUnlocked` FROM `chunk_data` WHERE `chunkX` = ? AND `chunkZ` = ?;";
+        String sql = "SELECT * FROM `chunk_data` WHERE `chunkX` = ? AND `chunkZ` = ?;";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, chunkX);
             statement.setInt(2, chunkZ);
@@ -105,6 +108,6 @@ public class ChunkDataRepository extends MySQLContainer {
     }
 
     public Connection getConnection() {
-        return super.getConnection("chunk_data.sql");
+        return super.getConnection("chunk_data.sql", "chunks");
     }
 }

@@ -3,7 +3,7 @@ package com.zerosevenn.bentobox.models;
 import java.util.UUID;
 
 public class IslandModel {
-    private int id;
+    private String id;
     private UUID ownerUuid;
     private int centerX;
     private int centerZ;
@@ -11,7 +11,16 @@ public class IslandModel {
     private String blueprint;
 
     public IslandModel(UUID ownerUuid, int centerX, int centerZ, int gridSize, String blueprint) {
-        this.id = Integer.parseInt(UUID.randomUUID().toString());
+        this.id = UUID.randomUUID().toString();
+        this.ownerUuid = ownerUuid;
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+        this.gridSize = gridSize;
+        this.blueprint = blueprint;
+    }
+
+    public IslandModel(String id, UUID ownerUuid, int centerX, int centerZ, int gridSize, String blueprint) {
+        this.id = id;
         this.ownerUuid = ownerUuid;
         this.centerX = centerX;
         this.centerZ = centerZ;
@@ -62,11 +71,11 @@ public class IslandModel {
         this.ownerUuid = ownerUuid;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 }

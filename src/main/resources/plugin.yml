@@ -2,6 +2,7 @@ name: bentobox
 version: '0.1'
 main: com.zerosevenn.bentobox.BentoBox
 api-version: '1.21'
+depends: vault
 commands:
   chunk:
     description: Command to generate the initial chunk.
