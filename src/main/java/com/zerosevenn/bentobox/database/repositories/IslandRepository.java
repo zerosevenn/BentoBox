@@ -35,7 +35,7 @@ public class IslandRepository extends MySQLContainer {
                 + ")";
 
         String sqlMySQLChunk = "CREATE TABLE IF NOT EXISTS `chunk_data` ("
-                + "`id` INT AUTO_INCREMENT PRIMARY KEY, "
+                + "`id` VARCHAR(255) PRIMARY KEY, "
                 + "`islandId` VARCHAR(255) NOT NULL, "
                 + "`chunkX` INT NOT NULL, "
                 + "`chunkZ` INT NOT NULL, "
@@ -45,7 +45,7 @@ public class IslandRepository extends MySQLContainer {
                 + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
         String sqlSQLiteChunk = "CREATE TABLE IF NOT EXISTS `chunk_data` ("
-                + "`id` INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "`id` TEXT PRIMARY KEY, "
                 + "`islandId` TEXT NOT NULL, "
                 + "`chunkX` INTEGER NOT NULL, "
                 + "`chunkZ` INTEGER NOT NULL, "
@@ -78,6 +78,7 @@ public class IslandRepository extends MySQLContainer {
             throw new RuntimeException("Error creating tables", e);
         }
     }
+
 
 
 

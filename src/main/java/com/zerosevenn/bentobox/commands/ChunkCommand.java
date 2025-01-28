@@ -57,8 +57,8 @@ public class ChunkCommand implements CommandExecutor {
                         plugin.getServer().getScheduler().runTask(plugin, () -> {
                             try {
                                 World world = location.getWorld();
-                                if (!world.isChunkLoaded(location.getBlockX() >> 4, location.getBlockZ() >> 4)) {
-                                    world.loadChunk(location.getBlockX() >> 4, location.getBlockZ() >> 4);
+                                if (!world.isChunkLoaded(location.getBlockX() , location.getBlockZ())) {
+                                    world.loadChunk(location.getBlockX(), location.getBlockZ());
                                 }
 
                                 int y = world.getHighestBlockYAt(location.getBlockX(), location.getBlockZ()) + 1;
@@ -77,7 +77,7 @@ public class ChunkCommand implements CommandExecutor {
                                 worldManager = new WorldManager(plugin, new ChunkUnlockManager(plugin));
                                 worldManager.generateChunk(player, location);
 
-                                player.teleport(location);
+                                teleportPlayerToSurface(player, location.getBlockX(), location.getBlockZ());
                                 player.sendMessage(ChatColor.GREEN + "Island created successfully!");
                             } catch (Exception e) {
                                 plugin.getLogger().severe("Error generating chunk or teleporting player: " + e.getMessage());
@@ -101,4 +101,13 @@ public class ChunkCommand implements CommandExecutor {
 
         return false;
     }
+
+    private void teleportPlayerToSurface(Player player, int chunkX, int chunkZ) {
+        World world = plugin.getIslandWord();
+        int bx = (chunkX << 4) + 8;
+        int bz = (chunkZ << 4) + 8;
+        int by = world.getHighestBlockYAt(bx, bz);
+        player.teleport(new Location(world, bx + 0.5, by + 1, bz + 0.5));
+    }
+
 }

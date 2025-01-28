@@ -1,3 +1,111 @@
 Islands-world: empty
-min-distance: 100
-land-cost: 1000
+Generation-world: gen-world
+
+Island Invite Expiration: 120 # seconds
+
+Default Island Border Radius: 3
+
+Island Expansion Cost Formula: "%chunkblock.chunks.owned%^1.4" # Uses JEP for parsing equations
+
+Maximum Island Name Length: 18
+
+Island Removal Cooldown:
+  Cost: 5
+  Time:
+    Days: 1
+    Hours: 2
+    Minutes: 30
+
+  # Note any slot numbers with an asterisk '*' is reserved
+  #  1,  2,  *3,  *4,  *5, * 6,  *7,  8,  9,
+  # 10, 11, *12, *13, *14, *15, *16, 17, 18,
+  # 19, 20, *21, *22, *23, *24, *25, 26, 27
+  # 28, 29, *30, *31, *32, *33, *34, 35, 36
+  # 37, 38, *39, *40, *41, *42, *43, 44, 45
+
+Island Panel:
+  Title: ""
+  Cooldown:
+    Amount: 180 # cooldown in seconds for when player can generate another chunk
+    Message: "&cYou are on cooldown for %countdown_minutes%m %countdown_seconds%s."
+  Center Item:
+    Title: "&a&lYou Are Here"
+    Material: "ENDER_EYE"
+    Enchanted: False
+  Border Item:
+    Title: "&c&lISLAND BORDER LIMIT"
+    Material: "CYAN_STAINED_GLASS_PANE"
+    Enchanted: False
+  Caching Item:
+    Title: "&7&l%chunk_x%,%chunk_z%"
+    Material: "PURPLE_STAINED_GLASS_PANE"
+    Lore:
+      - "&e&l&lLoading..."
+    Enchanted: True
+  Too Expensive Item:
+    Title: "&c&l%chunk_x%,%chunk_z%"
+    Material: "RED_STAINED_GLASS_PANE"
+    Lore:
+      - "&c&lToo Expensive"
+      - "&4&o1%token_cost% Tokens"
+    Enchanted: False
+  Placeholder Item:
+    Title: ""
+    Material: "WHITE_STAINED_GLASS_PANE"
+  Chunk Status Item:
+    Loading:
+      Title: "&6&l%chunk_x%,%chunk_z%"
+      Material: "YELLOW_STAINED_GLASS_PANE"
+      Lore:
+        - "&e&lLoading..."
+      Enchanted: True
+    Loaded:
+      Title: "&6&l%chunk_x%,%chunk_z%"
+      Material: "LIME_STAINED_GLASS_PANE"
+      Lore:
+        - "&a&lLoaded"
+      Enchanted: False
+    Unlocked:
+      Title: "&6&l%chunk_x%,%chunk_z%"
+      Material: "BLACK_STAINED_GLASS_PANE"
+      Lore:
+        - "&7&lUnlocked"
+        - "&6Click To Purchase:"
+        - "&e&o%token_cost% Tokens"
+      Enchanted: False
+    Locked:
+      Title: "&6&l%chunk_x%,%chunk_z%"
+      Material: "BROWN_STAINED_GLASS_PANE"
+      Lore:
+        - "&c&lLocked"
+      Enchanted: False
+  1: # slot 1
+    Title: "&6&lToken Balance"
+    Material: "GOLD_NUGGET"
+    Lore:
+      - "&6&lBalance: &e&l%chunkblock.tokens%"
+    Enchanted: False
+    Execute:
+      - "op: tell %player_name% &e&pThis is a console command!"
+      - "me Command #2"
+
+Island Generation:
+  Animation:
+    Flipped: False
+    Delay: 100 # milliseconds
+    Blocks Per Iteration: 256
+  Displacement: 15 # This is the distance (in chunks) islands will generate from each other
+  Biomes: # You can find a list of Bukkit biomes here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/block/Biome.html
+    - "BADLANDS"
+    - "BAMBOO_JUNGLE"
+    - "BEACH"
+    - "BIRCH_FOREST"
+    - "DESERT"
+    - "FOREST"
+    - "JUNGLE"
+    - "MOUNTAINS"
+    - "PLAINS"
+    - "SAVANNA"
+    - "SNOWY_TUNDRA"
+    - "SWAMP"
+    - "TAIGA"

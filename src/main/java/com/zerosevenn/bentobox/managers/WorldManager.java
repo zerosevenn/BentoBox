@@ -7,14 +7,17 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BlockType;
 import com.sk89q.worldedit.world.block.BlockTypes;
 import com.zerosevenn.bentobox.BentoBox;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import com.zerosevenn.bentobox.utils.ConfigUtils;
+import org.bukkit.*;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class WorldManager {
     private final BentoBox plugin;
@@ -24,10 +27,7 @@ public class WorldManager {
     public WorldManager(JavaPlugin plugin, ChunkUnlockManager chunkUnlockManager) {
         this.plugin = (BentoBox) plugin;
         this.chunkUnlockManager = chunkUnlockManager;
-        this.randomWorld = Bukkit.getWorld("world");
-        if (this.randomWorld == null) {
-            throw new IllegalStateException("World 'world' does not exist!");
-        }
+        initializeRandomWorld();
     }
 
     public void generateChunk(Player player, Location location, int delay, int minY, int maxY) {
@@ -80,9 +80,6 @@ public class WorldManager {
                     } catch (Exception e) {
                         plugin.getLogger().severe("Error generating layer " + currentY + ": " + e.getMessage());
                     }
-                    if (currentY == finalRealMaxY) {
-                        teleportPlayerToSurface(player, cx, cz);
-                    }
                 }, delay * (y - minY));
             }
         } catch (Exception e) {
@@ -91,13 +88,6 @@ public class WorldManager {
         }
     }
 
-    private void teleportPlayerToSurface(Player player, int chunkX, int chunkZ) {
-        World world = plugin.getIslandWord();
-        int bx = (chunkX << 4) + 8;
-        int bz = (chunkZ << 4) + 8;
-        int by = world.getHighestBlockYAt(bx, bz);
-        player.teleport(new Location(world, bx + 0.5, by + 1, bz + 0.5));
-    }
 
     public void generateChunk(Player player, Location location) {
         int delay = 1;
@@ -105,4 +95,64 @@ public class WorldManager {
         int maxY = location.getWorld().getMaxHeight();
         generateChunk(player, location, delay, minY, maxY);
     }
+
+    private void initializeRandomWorld() {
+        String worldName = ConfigUtils.getIslandsWorld();
+        if (worldName == null || worldName.isEmpty()) {
+            throw new IllegalStateException("O nome do mundo na configuração não está definido ou está vazio.");
+        }
+
+        randomWorld = Bukkit.getWorld(worldName);
+        if (randomWorld == null) {
+            plugin.getLogger().info("Criando mundo: " + worldName);
+            WorldCreator creator = new WorldCreator(worldName);
+            creator.environment(World.Environment.NORMAL);
+            creator.type(WorldType.NORMAL);
+            creator.generateStructures(false);
+            creator.generator(new CustomChunkGenerator(convertStringsToBiomes()));
+            randomWorld = creator.createWorld();
+            if (randomWorld == null) {
+                throw new IllegalStateException("Falha ao criar ou carregar o mundo: " + worldName);
+            }
+        }
+    }
+
+    public List<Biome> convertStringsToBiomes() {
+        List<String> biomeNames = ConfigUtils.getIslandGenerationBiomes();
+        List<Biome> biomes = new ArrayList<>();
+        for (String name : biomeNames) {
+            try {
+                Biome biome = Biome.valueOf(name.toUpperCase());
+                biomes.add(biome);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Bioma desconhecido: " + name);
+            }
+        }
+        return biomes;
+    }
+
+    public World getRandomWorld() {
+        return randomWorld;
+    }
+
+
+    private static class CustomChunkGenerator extends ChunkGenerator {
+        private final List<Biome> biomes;
+
+        public CustomChunkGenerator(List<Biome> biomes) {
+            this.biomes = biomes;
+        }
+
+        public void generateSurface(World world, Random random, int x, int z, ChunkData chunkData) {
+            Biome biome = biomes.get(Math.abs((x + z) % biomes.size()));
+            for (int bx = 0; bx < 16; bx++) {
+                for (int bz = 0; bz < 16; bz++) {
+                    int worldX = (x << 4) + bx;
+                    int worldZ = (z << 4) + bz;
+                    world.setBiome(worldX, worldZ, biome);
+                }
+            }
+        }
+    }
 }
+

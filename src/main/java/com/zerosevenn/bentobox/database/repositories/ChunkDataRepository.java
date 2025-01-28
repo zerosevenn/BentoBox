@@ -10,41 +10,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class ChunkDataRepository extends MySQLContainer {
     public ChunkDataRepository(JavaPlugin instance) {
         super(instance);
     }
 
-    public void createChunkDataTable() {
-//        String sql = "CREATE TABLE IF NOT EXISTS `chunk_data` (" +
-//                "`id` INT AUTO_INCREMENT PRIMARY KEY," +
-//                "`islandId` VARCHAR(255) NOT NULL," +
-//                "`chunkX` INT NOT NULL," +
-//                "`chunkZ` INT NOT NULL," +
-//                "`isUnlocked` BOOLEAN NOT NULL DEFAULT FALSE," +
-//                "FOREIGN KEY (`islandId`) REFERENCES `island_data`(`id`) " +
-//                "ON DELETE CASCADE ON UPDATE CASCADE" +
-//                ") ENGINE=InnoDB;";
-//        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-//            statement.execute();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-    }
-
-
     public void insertChunkData(Chunk chunk, String islandId, boolean isUnlocked) {
-        System.out.println("Tentando insert chunk data");
-        String sql = "INSERT INTO `chunk_data` (`islandId`, `chunkX`, `chunkZ`, `isUnlocked`) VALUES (?, ?, ?, ?);";
+        String sql = "INSERT INTO `chunk_data` (`id`, `islandId`, `chunkX`, `chunkZ`, `isUnlocked`) VALUES (?, ?, ?, ?, ?);";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, islandId);
-            statement.setInt(2, chunk.getX());
-            statement.setInt(3, chunk.getZ());
-            statement.setBoolean(4, isUnlocked);
+            String chunkId = UUID.randomUUID().toString();
+            statement.setString(1, chunkId);
+            statement.setString(2, islandId);
+            statement.setInt(3, chunk.getX());
+            statement.setInt(4, chunk.getZ());
+            statement.setBoolean(5, isUnlocked);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error inserting chunk data", e);
         }
     }
 
@@ -55,17 +39,17 @@ public class ChunkDataRepository extends MySQLContainer {
             statement.setInt(2, chunkZ);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                ChunkDataModel chunkData = new ChunkDataModel(
+                return new ChunkDataModel(
+                        rs.getString("id"),
                         rs.getString("islandId"),
                         rs.getInt("chunkX"),
                         rs.getInt("chunkZ"),
                         rs.getBoolean("isUnlocked")
                 );
-                return chunkData;
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error fetching chunk data", e);
         }
     }
 
@@ -77,24 +61,27 @@ public class ChunkDataRepository extends MySQLContainer {
             statement.setInt(3, chunk.getZ());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating chunk status", e);
         }
     }
 
     public boolean isChunkUnlocked(World world, int chunkX, int chunkZ) {
-        String sql = "SELECT * FROM `chunk_data` WHERE `chunkX` = ? AND `chunkZ` = ?;";
+        String sql = "SELECT `isUnlocked` FROM `chunk_data` WHERE `chunkX` = ? AND `chunkZ` = ?;";
         try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, chunkX);
             statement.setInt(2, chunkZ);
+
+            String finalQuery = sql.replaceFirst("\\?", String.valueOf(chunkX))
+                    .replaceFirst("\\?", String.valueOf(chunkZ));
+            System.out.println("Executing SQL: " + finalQuery);
+
             ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getBoolean("isUnlocked");
-            }
-            return false;
+            return rs.next() && rs.getBoolean("isUnlocked");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error checking if chunk is unlocked", e);
         }
     }
+
 
     public void deleteChunkData(Chunk chunk) {
         String sql = "DELETE FROM `chunk_data` WHERE `chunkX` = ? AND `chunkZ` = ?;";
@@ -103,7 +90,7 @@ public class ChunkDataRepository extends MySQLContainer {
             statement.setInt(2, chunk.getZ());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error deleting chunk data", e);
         }
     }
 

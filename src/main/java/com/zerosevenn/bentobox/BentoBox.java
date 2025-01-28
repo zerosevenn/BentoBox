@@ -4,12 +4,10 @@ import com.zerosevenn.bentobox.commands.ChunkCommand;
 import com.zerosevenn.bentobox.config.GeneralConfiguration;
 import com.zerosevenn.bentobox.config.IslandConfiguration;
 import com.zerosevenn.bentobox.config.MessagesConfiguration;
-import com.zerosevenn.bentobox.database.repositories.ChunkDataRepository;
-import com.zerosevenn.bentobox.database.repositories.GridRepository;
-import com.zerosevenn.bentobox.database.repositories.IslandRepository;
-import com.zerosevenn.bentobox.database.repositories.PlayerDataRepository;
+import com.zerosevenn.bentobox.database.repositories.*;
 import com.zerosevenn.bentobox.listeners.InventoryInteractListener;
 import com.zerosevenn.bentobox.managers.EconomyManager;
+import com.zerosevenn.bentobox.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.PluginManager;
@@ -23,6 +21,7 @@ public final class BentoBox extends JavaPlugin {
     private IslandRepository islandRepository;
     private GridRepository gridRepository;
     private PlayerDataRepository playerDataRepository;
+    private IslandMemberRepository islandMemberRepository;
     private GeneralConfiguration gConfig;
     private IslandConfiguration isConfig;
     private MessagesConfiguration messagesConfig;
@@ -55,12 +54,14 @@ public final class BentoBox extends JavaPlugin {
         this.gConfig = new GeneralConfiguration(this);
         this.isConfig = new IslandConfiguration(this);
         new EconomyManager();
+        ConfigUtils.initialize(this);
         logInitializationStep("Configurations loaded successfully.");
     }
 
     private void initializeRepositories() {
         logInitializationStep("Initializing repositories...");
         this.islandRepository = new IslandRepository(this);
+        this.islandMemberRepository = new IslandMemberRepository(this);
         this.chunkDataRepository = new ChunkDataRepository(this);
         this.gridRepository = new GridRepository(this);
         this.playerDataRepository = new PlayerDataRepository(this);
@@ -69,10 +70,10 @@ public final class BentoBox extends JavaPlugin {
 
     private void initializeDatabaseTables() {
         logInitializationStep("Attemping to initialize data repositories...");
-        chunkDataRepository.createChunkDataTable();
         gridRepository.createGridDataTable();
         islandRepository.createIslandTable();
         playerDataRepository.createTable();
+        islandMemberRepository.createMemberTable();
     }
 
     private void initializeCommands() {

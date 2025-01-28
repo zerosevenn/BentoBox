@@ -1,2 +1,315 @@
-messages:
-  chunk-created: "&aIsland created successfully!"
+Generics:
+  Error:
+    Critical Server Error: "&cAn error just occurred. Please report the following error type to administrator, &l%error%&r!"
+    Player Not Found: "&cPlayer, %name% does not exist."
+    Command Syntax Error: "&eTry &6/chunk help &efor a list of available commands."
+    Command No Permission: "&cYou do not have permission for this command."
+    No Island Error: "&cYou do not have an island yet. Try /chunk to create one."
+    In Queue: "&cYou already are in queue for that action."
+  Misc:
+    Teleport: "&7Teleporting..."
+    Generating Island: "&eGenerating island..."
+    Missing Island: "&cYour island or the island you were last on may have been removed. You have been teleported to safety."
+
+Help Command:
+  Default:
+    - ""
+    - "%chunkblock.island.visitors%"
+    - "&e/chunk"
+    - " &6> &oCreates new chunk island or teleports you to your island. Opens &e/chunk panel&r if on island."
+    - "&e/chunk &6invite &7<nick>"
+    - " &6> &oInvites a player to join your chunk island, expires after 120 seconds"
+    - "&e/chunk &6accept"
+    - " &6> &oAccepts chunk island invite"
+    - "&e/chunk &6reject"
+    - " &6> &oRejects chunk island invite"
+    - "&e/chunk &6leave"
+    - " &6> &oLeave your island and return to spawn"
+    - "&e/chunk &6remove &7<nick>"
+    - " &6> &oRemoves player from your island"
+    - "&e/chunk &6teamchat"
+    - " &6> &oToggles chunk island chat"
+    - "&e/chunk &6<expel/kick>"
+    - " &6> &oKicks a visitor from your chunk island"
+    - "&e/chunk &6help"
+    - " &6> &oDisplays all possible &e/chunk &rcommands"
+    - "&e/chunk &6go"
+    - " &6> &oTeleports you to your chunk island"
+    - "&e/chunk &6visit &7<player>"
+    - " &6> &oTeleports you to a player's chunk island"
+    - "&e/chunk &6lock"
+    - " &6> &oLocks your chunk island from visitors"
+    - "&e/chunk panel"
+    - " &6> &oOpens GUI with chunk map - allows you to purchase/unlock other chunks"
+    - "&e/chunk &6sethome &7<none|name>"
+    - " &6> &oSets your chunk island home"
+    - "&e/chunk &6home &o<home>"
+    - " &6> &oTeleports player to chunk island"
+    - "&e/chunk &6spawn"
+    - " &6> &oTeleports player to chunk island spawn"
+    - "&e/chunk &6ban &o<player name>"
+    - " &6> &oBans a player from visiting your island"
+    - "&e/chunk &6banlist"
+    - "&e/chunk &6unban &o<player name>"
+    - " &6> &oUnbans a player from your island"
+    - "&e/chunk &6name &o<name>"
+    - " &6> &oChanges the island name"
+    - ""
+  Admin:
+    - ""
+    - "&c/cadmin &4tp &7<nick>"
+    - " &b> &oTeleports to a player's island"
+    - "&c/cadmin &4delete &7<nick>"
+    - " &b> &oDeletes a player's island &c&l(NOT UNDOABLE)"
+    - "&c/cadmin &4forceadd &7<nick>"
+    - "&c/cadmin &4tokens &7<add/take> <player> <#>"
+    - " &b> &oAdds a player to chunk island you stand on"
+    - "&c/cadmin &4forceremove &7<nick>"
+    - " &b> &oRemoves a player from island you stand on"
+    - "&c/cadmin &4changename &7<new island name>"
+    - " &b> &oChanges name of the island you stand on"
+    - "&c/cadmin &4tp &7<player name>"
+    - " &b> &oTeleport to a player's chunk island"
+    - "&c/cadmin &4setowner &7<player name>"
+    - " &b> &otransfers chunk island you stand on ownership to the player"
+    - "&c/cadmin &4reload"
+    - " &b> &oReload the plugin config"
+    - "&c/cadmin &4kick &7<player name>"
+    - " &b> &oKicks player from the island you stand on"
+    - "&c/cadmin &4info"
+    - " &b> &oInfo of island that you stand on"
+    - "&c/cadmin &4purge &7<time in days>"
+    - " &b> &oDangerous command that will remove all old/unused chunk islands after a giving period"
+    - ""
+
+Chunk Lock:
+  Lock: "&cLocking island from visitors."
+  Unlock: "&aUnlocking island - strangers can now visit your island"
+
+Chunk Visit:
+  Error:
+    Locked: "&cThe island you tried to visit is locked."
+    Banned: "&cYou can not visit an island that you are banned from."
+    Own Island: "&cYou can not visit your own island. Try &4/chunk&c or &4/chunk go&c instead."
+
+Chunk Kick:
+  Executor: "&aSuccessfully kicked &2%player_name%&r."
+  Recipient: "&eYou have been kicked from &6%chunkblock.island.owner%'s&r island."
+  Error:
+    No Permission: "&cYou need to be owner of the island to do that!"
+    Visitor Not Found: "&cPlayer, &4%player_name%&c is not a visitor."
+
+Chunk Ban:
+  Executor: "&aSuccessfully banned %player_name%."
+  Recipient: "&cYou are now banned."
+  Error:
+    No Permission: "&cYou need to be owner of the island to do that!"
+    Owner: "&cYou cannot ban the owner."
+    Self Ban: "&cYou cannot ban yourself."
+    Already Banned: "&e%player_name% is already banned."
+
+Chunk Banlist:
+  Executor:
+    - "&8=================="
+    - "%banlist%" # local placeholder
+    - "&8=================="
+  Banlist Format: "&3* &c&o%player_name%" # format for %banlist% placeholder
+  Error:
+    Empty Banlist: "&7No one banned" # replaces %banlist% placeholder
+
+Chunk Unban:
+  Executor: "&aSuccessfully unbanned player."
+  Recipient: "&cYou are no longer banned."
+  Error:
+    No Permission: "&cYou need to be owner of the island to do that!"
+    Not Banned: "&e%player_name% is not banned."
+
+Chunk Panel:
+  Executor: "&aOpening..."
+
+Chunk Invite:
+  Error:
+    Target Island Exists: "Player already has an island."
+    Target Banned: "Player is currently banned."
+    No Permission: "&cYou need to be owner of the island to do that!"
+  Invite:
+    Executor: "&6Sent invite."
+    Recipient: "&6You have been invited to coop at &e%player_name%'s island&6. &eClick this message&6 to accept or &e/chunk reject &6to decline."
+    Response:
+      Recipient Accept: "&aSuccessfully accepted invitation."
+      Recipient Reject: "&eSuccessfully declined invitation."
+      Executor Accept: "&aPlayer accepted your invite request!"
+      Executor Reject: "&cPlayer rejected your invite request!"
+  Accept Fail:
+    Island Exists: "&6You already have an island."
+    Missing Invite: "&cYour invite has either expired or never existed originally."
+    Banned: "&eYou can't accept an invite to an island you are already banned from."
+    Pending Island: "&cYou cannot accept an invite while in queue for your own island."
+
+Chunk Coop Remove:
+  Executor: "&eRemoved %player_name% from your island."
+  Recipient: "&cYou were removed from your island."
+  Error:
+    Permission: "&eYou need to be owner of the island to use that command."
+    Owner: "&cYou can not remove %player_name% from your island since they are the owner of the coop."
+    No Coop: "&cPlayer, %player_name%, is not part of your island's coop."
+
+Chunk Coop Leave:
+  Executor: "&eSuccessfully left island."
+  Error:
+    Island Owner: "&cYou can not leave since you are owner of the island. Try &4/chunk remove &cto delete your island."
+
+Chunk Leave:
+  Executor: "&cLeaving..."
+  Error:
+    No Current Island: "&cNo island to leave currently."
+
+Chunk Remove:
+  Kick Message: "&eIsland was removed.. you were teleported to safety."
+  Remove Message: "&eYour island was removed."
+  Error:
+    Cooldown: "&eYou've removed your last island too recently, please wait &6%countdown_days%d  &6%countdown_hours%h %countdown_minutes%m&e!"
+    Too Expensive: "&cYou do not have enough tokens for this. &o(%cost% tokens)"
+    Not Owner: "&cYou need to be the owner of this island to perform this command."
+
+Chunk Home:
+  No Such Home: "&cThere is no defined home by that name."
+
+Chunk Set Home:
+  Executor: "&aSuccessfully added home."
+
+Chunk Name:
+  Executor: "&aSuccessfully updated name."
+  Error:
+    No Permission: "&cYou need to be owner of the island to do that!"
+    Too Long: "&cName entered exceeds %name.length% characters."
+
+Chunk Chat:
+  Enabled:
+    - "&8========================"
+    - ""
+    - "&2&lSwitched to Island Team Chat"
+    - ""
+    - "&8========================"
+  Disabled:
+    - "&8========================"
+    - ""
+    - "&a&lSwitched to Public Chat"
+    - ""
+    - "&8========================"
+  Format: "&6&l| &8[&e&l%chunkblock.island.name%&8] %player_name%&7: &e"
+
+Chunk Info:
+  Executor:
+    - "&7------| &2&lIsland Info &7|------"
+    - "&bName: &9%chunkblock.island.name%"
+    - "&bOwner: &9%chunkblock.island.owner%"
+    - "&bMembers: &9%chunkblock.island.members%"
+    - "&bStart Date: &9%chunkblock.island.startdate%"
+    - "&bChunks: &9%chunkblock.chunks.owned%"
+    - "&bBans: &9%chunkblock.island.bans%"
+    - "&bInvites: &9%chunkblock.island.invites%"
+    - "&7------------------------------"
+
+#           ===============================================
+#           ========== A D M I N   S E C T I O N ==========
+#           ===============================================
+
+Admin Chunk Delete:
+  Executor: "&aSuccessfully deleted player's island."
+  Error:
+    Not On Island: "&cYou are not currently standing on an island."
+    No Island: "&cThat player does not have an island."
+
+Admin Chunk Create:
+  Executor: "&aSuccessfully executed generation request."
+  Error:
+    No Island: "&cYou are not currently standing on an island."
+
+Admin Token:
+  Error:
+    Syntax: "&eUnrecognized arguments, try &6&o/cadmin tokens {add/take/get} {player_name} {#}&r instead."
+  Add:
+    Recipient: "&6%deposit.amount% &etokens were just ADDED to your balance."
+    Executor: "&aSuccessfully gave tokens to player."
+  Take:
+    Recipient: "&6%withdraw.amount% &etokens were just TAKEN out of your balance."
+    Executor: "&aSuccessfully took tokens from %player_name%."
+  Get:
+    Executor: "&6%player_name% &3has &6%chunkblock.tokens% &etokens."
+
+Admin Purge:
+  Executor: "&e&lPurge Now Active!"
+  Error:
+    Syntax: "&cThe value provided is not a clear number. Please provide a value representative in the number of days."
+
+Admin Teleport:
+  Error:
+    No Island: "&4%player_name% &cdoes not have an island."
+    Syntax: "&eTry &6&o/cadmin teleport {player} &eto teleport to a player's island."
+
+Admin Info:
+  Executor:
+    - "&7------| &2&lIsland Info &7|------"
+    - "&bName: &9%chunkblock.island.name%"
+    - "&bOwner: &9%chunkblock.island.owner%"
+    - "&bMembers: &9%chunkblock.island.members%"
+    - "&bStart Date: &9%chunkblock.island.startdate%"
+    - "&bChunks: &9%chunkblock.chunks.owned%"
+    - "&bBans: &9%chunkblock.island.bans%"
+    - "&bInvites: &9%chunkblock.island.invites%"
+    - "&7------------------------------"
+  Error:
+    No Island: "&cYou are not currently standing on an island."
+
+Admin Force Add:
+  Executor: "&aSuccessfully ADDED &2%player_name%&r to &2%chunkblock.island.owner%'s&r island."
+  Error:
+    Already Member: "&6%player_name% &eis already a member of &6%chunkblock.island.owner%'s&r island."
+    No Island: "&cYou are not currently standing on an island."
+    Syntax: "&eTry &6&o/cadmin forceadd {player} &eto add a designated member to a player's island."
+
+Admin Force Remove:
+  Executor: "&aSuccessfully REMOVED &2%player_name%&r from &2%chunkblock.island.owner%'s&r island."
+  Error:
+    Not A Member: "&6%player_name% &eis already not a member of &6%chunkblock.island.owner%'s&r island."
+    No Island: "&4%player_name% &cdoes not have an island."
+    Syntax: "&eTry &6&o/cadmin forceremove {player} &eto add a designated member to a player's island."
+
+Admin Change Name:
+  Executor: "&aSuccessfully updated name."
+  Error:
+    Too Long: "&cName entered exceeds %name.length% characters."
+    No Island: "&cYou are not currently standing on an island."
+    Syntax: "&eTry &6&o/cadmin changename {name} &eto update the island you are standing on."
+
+Admin Set Owner:
+  Executor: "&aSuccessfully SET &2%player_name%&a as OWNER for &2%chunkblock.island.owner%'s&a island."
+  Recipients:
+    Original Owner: "&eYou are no longer OWNER of your island."
+    New Owner: "&aYou are now OWNER of &2%chunkblock.island.owner%'s&a island."
+  Error:
+    Has Island: "&e%player_name% &6currently owns an island. Remove their island first before changing their island ownership."
+    Already Owner: "&e%player_name% is already owner."
+    No Island: "&cYou are not currently standing on an island."
+    Syntax: "&eTry &6&o/cadmin setowner {name} &eto update the owner for the island you are standing on."
+
+Admin Kick:
+  Executor: "&aSuccessfully KICKED &2%player_name%&r from &2%chunkblock.island.owner%'s&r island."
+  Recipient: "&eYou have been kicked from &6%chunkblock.island.owner%'s&r island."
+  Error:
+    Not A Visitor: "&6%player_name% &eis not a visitor."
+    No Island: "&cYou are not currently standing on an island."
+    Syntax: "&eTry &6&o/cadmin kick {name} &eto kick the player from the island you are standing on."
+
+Admin Reload:
+  Start Config: "&eReloading config:"
+  Start Language:
+    - "&7-------------------"
+    - "&eReloading messages:"
+  End: "&aDone!"
+
+Admin Total:
+  Chunks: "&2There are &a%chunks% &2generated chunks."
+  Islands: "&2There are currently &a%islands% &2islands."
+
