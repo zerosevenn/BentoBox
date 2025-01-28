@@ -1,0 +1,7 @@
+Database:
+  host: "localhost"
+  port: 3306
+  database: "database_name"
+  username: "user"
+  password: "password"
+  use-mysql: false
